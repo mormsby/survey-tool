@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Survey</title>
+  <link rel="stylesheet" href="css/main.css"/>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.0.0/css/bootstrap.min.css"/>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Online JavaScript Survey Tool</a>
+            </div>
+        </div><!-- /.container -->
+    </nav>
+
+    <!-- introduction and survey entrance -->
+<div class="col-md-4">
+    <h2>Survey</h2>
+    <hr>
+    <ul>
+        <li>An open source online survey tool.</li>
+        <li>Easy to set up without worrying about server code.</li>
+    </ul>
+    <hr>
+    <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#survey" >Take the Survey</button>
+    
+    </div>
+</div>
+
+<!-- survey detail modal -->
+<div class="modal fade" id="survey" tabindex="-1" role="dialog" aria-labelledby="survey" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Survey Test</h4>
+            </div>
+            <div class="modal-body">
+                <!-- open question -->
+                <div class="hidden">
+                    <h3>What is your name?</h3>
+                    <input type="text" placeholder="Enter a name here">
+                </div>
+                <!-- radio choice question -->
+                <div class="">
+                    <h3>Which of these colors do you like the least?</h3>
+                    <div class="radio">
+                        <input type="radio" onClick="setSegment(name,value)" name="question_1" value="Red">Red<br/>
+                        <input type="radio" onClick="setSegment(name,value)" name="question_1" value="Blue">Blue<br/>
+                        <input type="radio" onClick="setSegment(name,value)" name="question_1" value="Green">Green<br/>
+                    </div>
+                </div>
+                <!-- toggle choice question -->
+                <div class="hidden">
+                    <h3>Will you buy me dinner?</h3>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary" btn-radio="'Yes'">YES</button>
+                        <button type="button" class="btn btn-primary" btn-radio="'No'">NO</button>
+                    </div>
+                </div>
+                <!-- star rating question -->
+                <div>
+                    <h3>
+                        What is your opinion on the overall look of this site?<br />
+                        <small>Pick the option closest to you</small>
+                    </h3>
+                    <div star-rating rating-value="rating" max="10"></div>
+                    <div class="radio" >
+                        <input type="radio" onClick="setSegment(name,value)" name="rating" value="Professional">Professionally done<br/>
+                        <input type="radio" onClick="setSegment(name,value)" name="rating" value="Good">It's good<br/>
+                        <input type="radio" onClick="setSegment(name,value)" name="rating" value="Normal">Normal, nothing special<br/>
+                        <input type="radio" onClick="setSegment(name,value)" name="rating" value="Horrible">Horrible user experience<br/>
+                    </div>
+                </div>
+                <!-- textarea open question -->
+                <div class="hidden">
+                    <h3>Comments/Suggestions (Optional)</h3>
+                    <textarea class="form-control" rows="2" ></textarea>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" onClick="reset()">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onClick="submitSurvey() & reset()">Send results</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+    <div class="navbar navbar-default navbar-fixed-bottom">
+        <div class="container">
+            <p class="text-muted credit">This is a <a href="http://github.com/cdeng/angularFire-survey" title="Github project" target="_blank">Github</a> Project that was originally done in Angular JS. It has been modified to pure JavaScript.
+        </div>
+    </div>
+
+    <script src="//cdn.jsdelivr.net/jquery/2.0.3/jquery-2.0.3.min.js"></script>
+    <script src="//cdn.jsdelivr.net/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="survey.js"></script>
+</body>
+</html>

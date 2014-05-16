@@ -1,5 +1,7 @@
 // mocking an array of objects of the different survey segments
-var surveySegments = [
+var surveySegments = {
+  title: "Online JavaScript Survey Tool",
+  segments: [
     {
       name: "rating",
       value: null,
@@ -100,7 +102,8 @@ var surveySegments = [
       type: "radio",
       show: false
     }
-];
+  ]
+};
 
 var constants = {
     collectorInterface:{
@@ -137,7 +140,7 @@ function buildModalInDom(){
             '<div class="modal-content">'+
                 '<div class="modal-header">'+
                     '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-                    '<h4 class="modal-title">Survey Test</h4>'+
+                    '<h4 class="modal-title">' + surveySegments.title + '</h4>'+
                 '</div>'+
                 '<div class="modal-body" id="survey-modal-body">'+
                 '</div>'+
@@ -192,19 +195,19 @@ function addQuestions(){
   var questionNumber = 0;
     traverseSurveySegment(function(index){
       
-      if(surveySegments[index].show){
+      if(surveySegments.segments[index].show){
         // question gets placed here
         questionNumber++;
-        $('.survey-question').append('<h3>'+ questionNumber + '. ' + surveySegments[index].question.description + '</h3>');
+        $('.survey-question').append('<h3>'+ questionNumber + '. ' + surveySegments.segments[index].question.description + '</h3>');
 
         // answers get placed here 
-        if(surveySegments[index].type != constants.questionAnswerHtmlElements.textarea){
+        if(surveySegments.segments[index].type != constants.questionAnswerHtmlElements.textarea){
           // supports radio buttons and checkboxes to date
-          surveySegments[index].question.answers.forEach(function(answer){
+          surveySegments.segments[index].question.answers.forEach(function(answer){
             
               $('.survey-question').append('<div class="radio"> ' + 
-                '<input type="' + surveySegments[index].type + '" onClick="setSegment(name,value)"' + 
-                'name="' + surveySegments[index].name +  
+                '<input type="' + surveySegments.segments[index].type + '" onClick="setSegment(name,value)"' + 
+                'name="' + surveySegments.segments[index].name +  
                 '"value="' + answer.value + '">' + 
                 answer.text + '<br/>' +
               '</div>');
@@ -227,12 +230,12 @@ function addQuestions(){
 function submitSurvey(){
     
     // building the URL for the data to be submitted to
-    var submitToApiEndpt = APIConfig.host + constants.collectorInterface.profile + "?dataset=" + APIConfig.datasetEnvironmentToken;
+    var submitToApiEndpt = APIConfig.host + constants.collectorInterface.profile + "?dataset=" + APIConfig.datasetEnvironmentToken + "&profile_id=a28d3f90da0e11e3aea722000ab93e79";
 
     // add the survey segments that were set to the query string of the API call
     traverseSurveySegment(function(index){
-        if(surveySegments[index].value != null){
-            submitToApiEndpt = submitToApiEndpt + "&" + surveySegments[index].name + "=" + surveySegments[index].value;
+        if(surveySegments.segments[index].value != null){
+            submitToApiEndpt = submitToApiEndpt + "&" + surveySegments.segments[index].name + "=" + surveySegments.segments[index].value;
         }
     });
 
@@ -245,7 +248,7 @@ function submitSurvey(){
     Loops through the surveySegment array and execute a call back function on each element in the array
 */
 function traverseSurveySegment(callBackFn){
-    for (var index in surveySegments){
+    for (var index in surveySegments.segments){
       callBackFn(index);
     }
 }
@@ -257,8 +260,8 @@ function traverseSurveySegment(callBackFn){
 */
 function setSegment(name, value){
     traverseSurveySegment(function(index){
-        if(name == surveySegments[index].name){
-          surveySegments[index].value = value;
+        if(name == surveySegments.segments[index].name){
+          surveySegments.segments[index].value = value;
         }
     });
 
@@ -302,8 +305,8 @@ function createDataElement(endpointUrl){
     Checks if all the available questions in the survey have been answered
 */
 function isReadyToSubmit(){
-  for (var index in surveySegments){
-    if(surveySegments[index].show == true && surveySegments[index].value == null){
+  for (var index in surveySegments.segments){
+    if(surveySegments.segments[index].show == true && surveySegments.segments[index].value == null){
         return false;
     }
   };

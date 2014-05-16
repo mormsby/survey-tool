@@ -140,7 +140,7 @@ function buildModalInDom(){
                 '</div>'+
                 '<div class="modal-footer">'+
                     '<button type="button" class="btn btn-default"  onClick="hideSurvey()">Close</button>'+
-                    '<button type="button" class="btn btn-primary" data-dismiss="modal" onClick="submitSurvey() & hideSurvey()">Send results</button>'+
+                    '<button type="button" id="send-survey-button" class="btn btn-primary" data-dismiss="modal" onClick="submitSurvey() & hideSurvey()">Send results</button>'+
                 '</div>'+
             '</div><!-- /.modal-content -->'+
         '</div><!-- /.modal-dialog -->'+
@@ -148,6 +148,8 @@ function buildModalInDom(){
 
     $('#survey-modal-body').append('<div class="survey-question"></div>');
     addQuestions();
+
+    $('#send-survey-button').prop('disabled', true);
 
     // executes the falling function immediately after the modal hide function has been called
     // this is placed here to capture if the user exits the modal by the escape key, closing the window or clicking outside the modal window
@@ -220,19 +222,31 @@ function addQuestions(){
     Responsible for submitting the user's response on the survey to an API
 */
 function submitSurvey(){
+    var submitLock = false; 
 
-    // building the URL for the data to be submitted to
-    var submitToApiEndpt = APIConfig.host + constants.collectorInterface.profile + "?dataset=" + APIConfig.datasetEnvironmentToken;
-
-    // add the survey segments that were set to the query string of the API call
     traverseSurveySegment(function(index){
-        if(surveySegments[index].value != null){
-            submitToApiEndpt = submitToApiEndpt + "&" + surveySegments[index].name + "=" + surveySegments[index].value;
+        if(surveySegments[index].show && surveySegments[index].value == null){
+          submitLock = true;
         }
     });
 
-    // executing the sending of data to the API
-    createDataElement(submitToApiEndpt);
+    if(submitLock == false){
+      // building the URL for the data to be submitted to
+      var submitToApiEndpt = APIConfig.host + constants.collectorInterface.profile + "?dataset=" + APIConfig.datasetEnvironmentToken;
+
+      // add the survey segments that were set to the query string of the API call
+      traverseSurveySegment(function(index){
+          if(surveySegments[index].value != null){
+              submitToApiEndpt = submitToApiEndpt + "&" + surveySegments[index].name + "=" + surveySegments[index].value;
+          }
+      });
+
+      // executing the sending of data to the API
+      createDataElement(submitToApiEndpt);
+    }
+    else{
+      console.log("error");
+    }
 }
 
 /*
@@ -256,6 +270,14 @@ function setSegment(name, value){
           surveySegments[index].value = value;
         }
     });
+
+    // if it is able to submit then toggle on submit button
+    if(isReadyToSubmit()){
+      $('#send-survey-button').prop('disabled', false);
+    }
+    else{
+      $('#send-survey-button').prop('disabled', true);
+    }
 }
 
 /*
@@ -281,3 +303,18 @@ function createDataElement(endpointUrl){
     };
     headerElement.appendChild(dataElement);
 }
+
+/*
+    Checks if all the available questions in the survey have been answered
+*/
+function isReadyToSubmit(){
+  for (var index in surveySegments){
+    if(surveySegments[index].show == true && surveySegments[index].value == null){
+        return false;
+    }
+  };
+  return true;
+}
+
+
+

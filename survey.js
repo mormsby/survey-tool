@@ -119,6 +119,9 @@ var constants = {
     }
 };
 
+// clones surveySegments and assigns it to originalSurveySegments
+var originalSurveySegments =  JSON.parse( JSON.stringify(surveySegments));
+
 var APIConfig = {
   // change this property to point to different 
   datasetEnvironmentToken : constants.datasetTokens.prod,
@@ -285,6 +288,9 @@ function setSegment(name, value){
 */
 function reset(){
   removeModalFromDom();
+
+  // clones originalSurveySegments and assigns it to surveySegments
+  surveySegments =  JSON.parse( JSON.stringify(originalSurveySegments));
 }
 
 /*
@@ -316,5 +322,7 @@ function isReadyToSubmit(){
   return true;
 }
 
-
+function setSurveySegment(newSurveySegments){
+  surveySegments = newSurveySegments
+}
 

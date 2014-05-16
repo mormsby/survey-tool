@@ -145,39 +145,53 @@ function buildModalInDom(){
         '</div><!-- /.modal-dialog -->'+
     '</div>');
 
+    $('#survey-modal-body').append('<div class="survey-question"></div>');
     addQuestions();
+
   }
-  
 }
 
+/*
+  Responsible for cleaning the DOM of the modal
+*/
 function removeModalFromDom(){
   $('div#survey.modal').remove();
   $('div.modal-backdrop').remove();
 }
 
+/*
+  Shows the survey by first building it in the DOM then executing a call to Bootstrap API to show it
+*/
 function showSurvey(){
   buildModalInDom();
   $('#survey').modal('show');
 }
 
+/*
+  Hides the survey and resets the survey for next use
+*/
 function hideSurvey(){
   $('#survey').modal('hide');
 
-  // waits for the modal to fade out and hide before calling global reset which will include removing the modal form the DOM
-  setInterval(function(){
-    reset();
-  }, 500);
+  // calling global reset which will include removing the modal from the DOM
+  reset();
 }
 
+/*
+  Uses the traverseSurveySegment function in which to iterate through all the questions available for this survey and build them in the DOM
+*/
 function addQuestions(){
     traverseSurveySegment(function(index){
       if(surveySegments[index].show){
-        $('#survey-modal-body').append('<h3>'+ surveySegments[index].question.description + '</h3>');
+        // question gets placed here
+        $('.survey-question').append('<h3>'+ surveySegments[index].question.description + '</h3>');
 
+        // answers get placed here 
         if(surveySegments[index].type != constants.questionAnswerHtmlElements.textarea){
+          // supports radio buttons and checkboxes to date
           surveySegments[index].question.answers.forEach(function(answer){
             
-              $('#survey-modal-body').append('<div class="radio"> ' + 
+              $('.survey-question').append('<div class="radio"> ' + 
                 '<input type="' + surveySegments[index].type + '" onClick="setSegment(name,value)"' + 
                 'name="' + surveySegments[index].name +  
                 '"value="' + answer.value + '">' + 
@@ -186,7 +200,9 @@ function addQuestions(){
           });
         }
         else{
-          $('#survey-modal-body').append('<textarea class="form-control" rows="2" ></textarea>');
+          // supports text area
+          // TODO: have the API call that sends back the results of the survey support data captured in text area
+          $('.survey-question').append('<textarea class="form-control" rows="2" ></textarea>');
         }
       }
     });

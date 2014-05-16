@@ -28,3 +28,8 @@ ul.rating {
 .hidden {
     display:none;
 }
+
+#survey-modal-body{
+    height:400px;
+    overflow: auto;
+}

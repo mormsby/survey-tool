@@ -189,10 +189,13 @@ function hideSurvey(){
   Uses the traverseSurveySegment function in which to iterate through all the questions available for this survey and build them in the DOM
 */
 function addQuestions(){
+  var questionNumber = 0;
     traverseSurveySegment(function(index){
+      
       if(surveySegments[index].show){
         // question gets placed here
-        $('.survey-question').append('<h3>'+ surveySegments[index].question.description + '</h3>');
+        questionNumber++;
+        $('.survey-question').append('<h3>'+ questionNumber + '. ' + surveySegments[index].question.description + '</h3>');
 
         // answers get placed here 
         if(surveySegments[index].type != constants.questionAnswerHtmlElements.textarea){
@@ -212,6 +215,8 @@ function addQuestions(){
           // TODO: have the API call that sends back the results of the survey support data captured in text area
           $('.survey-question').append('<textarea class="form-control" rows="2" ></textarea>');
         }
+        $('.survey-question').append('<br/>');
+
       }
     });
 }

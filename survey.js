@@ -128,7 +128,8 @@ var APIConfig = {
 function buildModalInDom(){
   // ensures the survey modal only gets built once
   if($("div#survey.modal").length == 0){
-    $('body').append('<div class="modal fade" id="survey" tabindex="-1" role="dialog" aria-labelledby="survey" aria-hidden="true">'+
+    // data-backdrop is set to static so that the user cannot click outside the modal and exit it
+    $('body').append('<div class="modal fade" id="survey" tabindex="-1" data-backdrop="static" role="dialog" aria-labelledby="survey" aria-hidden="true">'+
         '<div class="modal-dialog">'+
             '<div class="modal-content">'+
                 '<div class="modal-header">'+
@@ -148,6 +149,12 @@ function buildModalInDom(){
     $('#survey-modal-body').append('<div class="survey-question"></div>');
     addQuestions();
 
+    // executes the falling function immediately after the modal hide function has been called
+    // this is placed here to capture if the user exits the modal by the escape key, closing the window or clicking outside the modal window
+    $('#survey').on('hide.bs.modal', function (e) {
+      // calling global reset which will include removing the modal from the DOM
+      reset();
+    });
   }
 }
 
@@ -165,6 +172,7 @@ function removeModalFromDom(){
 function showSurvey(){
   buildModalInDom();
   $('#survey').modal('show');
+  
 }
 
 /*
@@ -174,7 +182,7 @@ function hideSurvey(){
   $('#survey').modal('hide');
 
   // calling global reset which will include removing the modal from the DOM
-  reset();
+  //reset();
 }
 
 /*

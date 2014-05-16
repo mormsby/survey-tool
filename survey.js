@@ -93,10 +93,8 @@ var APIConfig = {
 };
 
 function buildModalInDom(){
-  console.log($(".survey"));
-
-  if(!$('#div').hasClass('survey')){
-    console.log('here');
+  // ensures the survey modal only gets built once
+  if($("div#survey.modal").length == 0){
     $('body').append('<div class="modal fade" id="survey" tabindex="-1" role="dialog" aria-labelledby="survey" aria-hidden="true">'+
         '<div class="modal-dialog">'+
             '<div class="modal-content">'+
@@ -107,18 +105,21 @@ function buildModalInDom(){
                 '<div class="modal-body" id="survey-modal-body">'+
                 '</div>'+
                 '<div class="modal-footer">'+
-                    '<button type="button" class="btn btn-default"  onClick="hideSurvey() & reset()">Close</button>'+
-                    '<button type="button" class="btn btn-primary" data-dismiss="modal" onClick="submitSurvey() & hideSurvey() & reset()">Send results</button>'+
+                    '<button type="button" class="btn btn-default"  onClick="hideSurvey()">Close</button>'+
+                    '<button type="button" class="btn btn-primary" data-dismiss="modal" onClick="submitSurvey() & hideSurvey()">Send results</button>'+
                 '</div>'+
             '</div><!-- /.modal-content -->'+
         '</div><!-- /.modal-dialog -->'+
     '</div>');
+
+    addQuestions();
   }
-  addQuestions();
+  
 }
 
 function removeModalFromDom(){
-  $('#survey-modal-body').remove();
+  $('div#survey.modal').remove();
+  $('div.modal-backdrop').remove();
 }
 
 function showSurvey(){
@@ -128,6 +129,11 @@ function showSurvey(){
 
 function hideSurvey(){
   $('#survey').modal('hide');
+
+  // waits for the modal to fade out and hide before calling global reset which will include removing the modal form the DOM
+  setInterval(function(){
+    reset();
+  }, 500);
 }
 
 function addQuestions(){
@@ -146,9 +152,9 @@ function addQuestions(){
               '</div>');
           });
         }
-          else{
-            $('#survey-modal-body').append('<textarea class="form-control" rows="2" ></textarea>');
-          }
+        else{
+          $('#survey-modal-body').append('<textarea class="form-control" rows="2" ></textarea>');
+        }
       }
     });
 }

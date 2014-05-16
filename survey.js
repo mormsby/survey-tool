@@ -2,23 +2,70 @@
 var surveySegments = [
     {
       name: "rating",
-      value: null
+      value: null,
+      type: "radio",
+      show: true,
+      question: 
+        {
+          description: "Which of these colors do you like the least?",
+          answers: [
+            {
+              text: "Red"
+            },
+            {
+              text: "Green"
+            },
+            {
+              text: "Blue"
+            }
+          ]
+        }
     }, 
     {
       name: "satisfaction",
-      value: null
+      value: null,
+      type: "radio",
+      show: false,
     },
     {
       name: "question_1",
-      value: null
+      value: null,
+      type: "radio",
+      show: true,
+      question: 
+        {
+          description: "What is your opinion on the overall look of this site?",
+          answers: [
+            {
+              text: "Professional"
+            },
+            {
+              text: "Good"
+            },
+            {
+              text: "Normal"
+            },
+            {
+              text: "Horrible"
+            }
+          ]
+        }
     },
     {
       name: "question_2",
-      value: null
+      value: null,
+      type: "textarea",
+      show: false,
+      question: 
+        {
+          description: "Comments/Suggestions (Optional)"
+        }
     },
     {
       name: "question_3",
-      value: null
+      value: null,
+      type: "radio",
+      show: false
     }
 ];
 
@@ -31,6 +78,11 @@ var constants = {
       dev:"c2e02c92c73211e3aaf844fb42fffe8c",
       staging: "b6822676c73211e3aaf844fb42fffe8c",
       prod : "afc0a6c8c73211e3aaf844fb42fffe8c"
+    },
+    questionAnswerHtmlElements:{
+      radio:"radio",
+      checkbox:"checkbox",
+      textarea:"textarea"
     }
 };
 
@@ -39,6 +91,67 @@ var APIConfig = {
   datasetEnvironmentToken : constants.datasetTokens.prod,
   host: "http://ec2-54-237-65-62.compute-1.amazonaws.com:8081"
 };
+
+function buildModalInDom(){
+  console.log($(".survey"));
+
+  if(!$('#div').hasClass('survey')){
+    console.log('here');
+    $('body').append('<div class="modal fade" id="survey" tabindex="-1" role="dialog" aria-labelledby="survey" aria-hidden="true">'+
+        '<div class="modal-dialog">'+
+            '<div class="modal-content">'+
+                '<div class="modal-header">'+
+                    '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
+                    '<h4 class="modal-title">Survey Test</h4>'+
+                '</div>'+
+                '<div class="modal-body" id="survey-modal-body">'+
+                '</div>'+
+                '<div class="modal-footer">'+
+                    '<button type="button" class="btn btn-default"  onClick="hideSurvey() & reset()">Close</button>'+
+                    '<button type="button" class="btn btn-primary" data-dismiss="modal" onClick="submitSurvey() & hideSurvey() & reset()">Send results</button>'+
+                '</div>'+
+            '</div><!-- /.modal-content -->'+
+        '</div><!-- /.modal-dialog -->'+
+    '</div>');
+  }
+  addQuestions();
+}
+
+function removeModalFromDom(){
+  $('#survey-modal-body').remove();
+}
+
+function showSurvey(){
+  buildModalInDom();
+  $('#survey').modal('show');
+}
+
+function hideSurvey(){
+  $('#survey').modal('hide');
+}
+
+function addQuestions(){
+    traverseSurveySegment(function(index){
+      if(surveySegments[index].show){
+        $('#survey-modal-body').append('<h3>'+ surveySegments[index].question.description + '</h3>');
+
+        if(surveySegments[index].type != constants.questionAnswerHtmlElements.textarea){
+          surveySegments[index].question.answers.forEach(function(answer){
+            
+              $('#survey-modal-body').append('<div class="radio"> ' + 
+                '<input type="' + surveySegments[index].type + '" onClick="setSegment(name,value)"' + 
+                'name="' + surveySegments[index].name +  
+                '"value="' + answer.text + '">' + 
+                answer.text + '<br/>' +
+              '</div>');
+          });
+        }
+          else{
+            $('#survey-modal-body').append('<textarea class="form-control" rows="2" ></textarea>');
+          }
+      }
+    });
+}
 
 /*
     Responsible for submitting the user's response on the survey to an API
@@ -86,7 +199,7 @@ function setSegment(name, value){
     Add all reset functions here so that there can be one point to reset any values that need to be
 */
 function reset(){
-  
+  removeModalFromDom();
 }
 
 /*

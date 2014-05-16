@@ -168,7 +168,6 @@ function buildModalInDom(){
 */
 function removeModalFromDom(){
   $('div#survey.modal').remove();
-  $('div.modal-backdrop').remove();
 }
 
 /*
@@ -177,7 +176,6 @@ function removeModalFromDom(){
 function showSurvey(){
   buildModalInDom();
   $('#survey').modal('show');
-  
 }
 
 /*
@@ -185,9 +183,6 @@ function showSurvey(){
 */
 function hideSurvey(){
   $('#survey').modal('hide');
-
-  // calling global reset which will include removing the modal from the DOM
-  //reset();
 }
 
 /*
@@ -225,31 +220,19 @@ function addQuestions(){
     Responsible for submitting the user's response on the survey to an API
 */
 function submitSurvey(){
-    var submitLock = false; 
+    
+    // building the URL for the data to be submitted to
+    var submitToApiEndpt = APIConfig.host + constants.collectorInterface.profile + "?dataset=" + APIConfig.datasetEnvironmentToken;
 
+    // add the survey segments that were set to the query string of the API call
     traverseSurveySegment(function(index){
-        if(surveySegments[index].show && surveySegments[index].value == null){
-          submitLock = true;
+        if(surveySegments[index].value != null){
+            submitToApiEndpt = submitToApiEndpt + "&" + surveySegments[index].name + "=" + surveySegments[index].value;
         }
     });
 
-    if(submitLock == false){
-      // building the URL for the data to be submitted to
-      var submitToApiEndpt = APIConfig.host + constants.collectorInterface.profile + "?dataset=" + APIConfig.datasetEnvironmentToken;
-
-      // add the survey segments that were set to the query string of the API call
-      traverseSurveySegment(function(index){
-          if(surveySegments[index].value != null){
-              submitToApiEndpt = submitToApiEndpt + "&" + surveySegments[index].name + "=" + surveySegments[index].value;
-          }
-      });
-
-      // executing the sending of data to the API
-      createDataElement(submitToApiEndpt);
-    }
-    else{
-      console.log("error");
-    }
+    // executing the sending of data to the API
+    createDataElement(submitToApiEndpt);
 }
 
 /*

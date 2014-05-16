@@ -7,16 +7,27 @@ var surveySegments = [
       show: true,
       question: 
         {
-          description: "Which of these colors do you like the least?",
+          description: "Give your rating on this site.",
           answers: [
             {
-              text: "Red"
+              text: "1 Star",
+              value: "1_star"
             },
             {
-              text: "Green"
+              text: "2 Star",
+              value: "2_star"
             },
             {
-              text: "Blue"
+              text: "3 Star",
+              value: "3_star"
+            },
+            {
+              text: "4 Star",
+              value: "4_star"
+            },
+            {
+              text: "5 Star",
+              value: "5_star"
             }
           ]
         }
@@ -25,7 +36,25 @@ var surveySegments = [
       name: "satisfaction",
       value: null,
       type: "radio",
-      show: false,
+      show: true,
+      question: 
+        {
+          description: "How satisfied are you by the services provided on this site?",
+          answers: [
+            {
+              text: "Very Satisfied",
+              value: "very_satisfied"
+            },
+            {
+              text: "Just Satisfied",
+              value: "just_satisfied"
+            },
+            {
+              text: "Not Satisfied At All",
+              value: "not_satisfied"
+            }
+          ]
+        }
     },
     {
       name: "question_1",
@@ -37,16 +66,20 @@ var surveySegments = [
           description: "What is your opinion on the overall look of this site?",
           answers: [
             {
-              text: "Professional"
+              text: "Professional",
+              value: "Professional"
             },
             {
-              text: "Good"
+              text: "Good",
+              value: "Good"
             },
             {
-              text: "Normal"
+              text: "Normal",
+              value: "Normal"
             },
             {
-              text: "Horrible"
+              text: "Horrible",
+              value: "Horrible"
             }
           ]
         }
@@ -147,7 +180,7 @@ function addQuestions(){
               $('#survey-modal-body').append('<div class="radio"> ' + 
                 '<input type="' + surveySegments[index].type + '" onClick="setSegment(name,value)"' + 
                 'name="' + surveySegments[index].name +  
-                '"value="' + answer.text + '">' + 
+                '"value="' + answer.value + '">' + 
                 answer.text + '<br/>' +
               '</div>');
           });

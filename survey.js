@@ -1,6 +1,6 @@
 // mocking an array of objects of the different survey segments
 var surveySegments = {
-  title: "Online JavaScript Survey Tool",
+  title: "This Is My Survey",
   segments: [
     {
       name: "rating",
@@ -140,7 +140,7 @@ function buildModalInDom(){
             '<div class="modal-content">'+
                 '<div class="modal-header">'+
                     '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-                    '<h4 class="modal-title">' + surveySegments.title + '</h4>'+
+                    '<h2 class="modal-title">' + surveySegments.title + '</h2>'+
                 '</div>'+
                 '<div class="modal-body" id="survey-modal-body">'+
                 '</div>'+
@@ -148,8 +148,8 @@ function buildModalInDom(){
                     '<button type="button" class="btn btn-default"  onClick="hideSurvey()">Close</button>'+
                     '<button type="button" id="send-survey-button" class="btn btn-primary" data-dismiss="modal" onClick="submitSurvey() & hideSurvey()">Send results</button>'+
                 '</div>'+
-            '</div><!-- /.modal-content -->'+
-        '</div><!-- /.modal-dialog -->'+
+            '</div>'+
+        '</div>'+
     '</div>');
 
     $('#survey-modal-body').append('<div class="survey-question"></div>');

@@ -178,6 +178,8 @@ function removeModalFromDom(){
 */
 function showSurvey(){
   buildModalInDom();
+  $('body').addClass('modal-open');
+  $('#survey').addClass('in');
   $('#survey').modal('show');
 }
 
@@ -230,7 +232,7 @@ function addQuestions(){
 function submitSurvey(){
     
     // building the URL for the data to be submitted to
-    var submitToApiEndpt = APIConfig.host + constants.collectorInterface.profile + "?dataset=" + APIConfig.datasetEnvironmentToken + "&profile_id=a28d3f90da0e11e3aea722000ab93e79";
+    var submitToApiEndpt = APIConfig.host + constants.collectorInterface.profile + "?dataset=" + APIConfig.datasetEnvironmentToken + "&profile_id=3cccd3d0cf1b11e380b822000ab93e79";
 
     // add the survey segments that were set to the query string of the API call
     traverseSurveySegment(function(index){

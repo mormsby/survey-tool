@@ -33,3 +33,7 @@ ul.rating {
     height:400px;
     overflow: auto;
 }
+
+.display-block-important {
+    display: block !important;
+}

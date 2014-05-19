@@ -193,6 +193,7 @@ function hideSurvey(){
   $('#survey').removeClass('in');
   $('#survey').attr('aria-hidden', true);
   $('#survey').removeClass('display-block-important');
+  removeModalFromDom();
 }
 
 /*

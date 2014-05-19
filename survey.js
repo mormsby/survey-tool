@@ -139,7 +139,7 @@ function buildModalInDom(){
         '<div class="modal-dialog">'+
             '<div class="modal-content">'+
                 '<div class="modal-header">'+
-                    '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
+                    '<button type="button" class="close" data-dismiss="modal" onClick="hideSurvey()" aria-hidden="true">&times;</button>'+
                     '<h2 class="modal-title">' + surveySegments.title + '</h2>'+
                 '</div>'+
                 '<div class="modal-body" id="survey-modal-body">'+
@@ -180,14 +180,19 @@ function showSurvey(){
   buildModalInDom();
   $('body').addClass('modal-open');
   $('#survey').addClass('in');
-  $('#survey').modal('show');
+  $('#survey').attr('aria-hidden', false);
+  $('#survey').addClass('display-block-important');
+  //$('#survey').modal('show');
 }
 
 /*
   Hides the survey and resets the survey for next use
 */
 function hideSurvey(){
-  $('#survey').modal('hide');
+  $('body').removeClass('modal-open');
+  $('#survey').removeClass('in');
+  $('#survey').attr('aria-hidden', true);
+  $('#survey').removeClass('display-block-important');
 }
 
 /*

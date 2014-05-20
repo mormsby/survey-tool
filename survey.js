@@ -155,6 +155,8 @@ function buildModalInDom(){
     $('#survey-modal-body').append('<div class="survey-question"></div>');
     addQuestions();
 
+    $('body').append('<div class="modal-backdrop fade in"></div>');
+
     $('#send-survey-button').prop('disabled', true);
 
     // executes the falling function immediately after the modal hide function has been called

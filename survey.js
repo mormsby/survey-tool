@@ -62,7 +62,7 @@ var surveySegments = {
       name: "question_1",
       value: null,
       type: "radio",
-      show: true,
+      show: false,
       question: 
         {
           description: "What is your opinion on the overall look of this site?",
@@ -128,7 +128,7 @@ var originalSurveySegments =  JSON.parse( JSON.stringify(surveySegments));
 var APIConfig = {
   // change this property to point to different 
   datasetEnvironmentToken : constants.datasetTokens.prod,
-  host: "http://ec2-54-237-65-62.compute-1.amazonaws.com:8081"
+  host: "https://ec2-54-237-65-62.compute-1.amazonaws.com:8081"
 };
 
 function buildModalInDom(){
@@ -173,6 +173,7 @@ function buildModalInDom(){
 */
 function removeModalFromDom(){
   $('div#survey.modal').remove();
+  $('div.modal-backdrop').remove();
 }
 
 /*
@@ -184,7 +185,6 @@ function showSurvey(){
   $('#survey').addClass('in');
   $('#survey').attr('aria-hidden', false);
   $('#survey').addClass('display-block-important');
-  //$('#survey').modal('show');
 }
 
 /*
@@ -238,19 +238,34 @@ function addQuestions(){
     Responsible for submitting the user's response on the survey to an API
 */
 function submitSurvey(){
+    var payload = {
+      "dataset" : APIConfig.datasetEnvironmentToken,
+      "profile_id": "3cccd3d0cf1b11e380b822000ab93e79"
+    };
     
+    var trackpayload = [];
+
     // building the URL for the data to be submitted to
     var submitToApiEndpt = APIConfig.host + constants.collectorInterface.profile + "?dataset=" + APIConfig.datasetEnvironmentToken + "&profile_id=3cccd3d0cf1b11e380b822000ab93e79";
 
     // add the survey segments that were set to the query string of the API call
     traverseSurveySegment(function(index){
         if(surveySegments.segments[index].value != null){
+            payload[surveySegments.segments[index].name] = surveySegments.segments[index].value;
+
+            trackpayload.push({});
+            trackpayload[trackpayload.length - 1]["dataset"] = APIConfig.datasetEnvironmentToken;
+            trackpayload[trackpayload.length - 1]["profile_id"] = "2cccd3d0cf1b11e380b822000ab93e79";
+            trackpayload[trackpayload.length - 1]["category"] = surveySegments.title;
+            trackpayload[trackpayload.length - 1]["action"] = surveySegments.segments[index].name;
+            trackpayload[trackpayload.length - 1]["label"] = surveySegments.segments[index].value;
+
             submitToApiEndpt = submitToApiEndpt + "&" + surveySegments.segments[index].name + "=" + surveySegments.segments[index].value;
         }
     });
 
     // executing the sending of data to the API
-    createDataElement(submitToApiEndpt);
+    createDataElement(submitToApiEndpt, payload, trackpayload);
 }
 
 /*
@@ -298,17 +313,28 @@ function reset(){
     @param endpointUrl - the URL that the request is being made to
     Creates an image tag that is used to make the .gif http request
 */
-function createDataElement(endpointUrl){
-    //Gets the head section of the page
-    var headerElement = document.getElementsByTagName('head')[0];
-    //Creates the script tag for member data inside the head
-    var dataElement = document.createElement('img');     
-    //dataElement.type = 'text/javascript';
-    dataElement.src=endpointUrl;
-    dataElement.onload = function() { //removes the tag when finished.
-      //headerElement.removeChild(dataElement);
-    };
-    headerElement.appendChild(dataElement);
+function createDataElement(endpointUrl, payload, trackpayload){
+  xmlhttp=new XMLHttpRequest();
+  xmlhttp.open("POST","https://ec2-54-237-65-62.compute-1.amazonaws.com:8081/profile.json",true);
+  xmlhttp.send(JSON.stringify(payload));
+
+  for (var index in trackpayload){
+    xmlhttptrack=new XMLHttpRequest();
+    xmlhttptrack.open("POST","https://ec2-54-237-65-62.compute-1.amazonaws.com:8081/track.json",true);
+    xmlhttptrack.send(JSON.stringify(trackpayload[index]));
+  }
+
+  // COMMENTED OUT: using an image tag to send data
+    ////Gets the head section of the page
+    //var headerElement = document.getElementsByTagName('head')[0];
+    ////Creates the script tag for member data inside the head
+    //var dataElement = document.createElement('img');     
+    ////dataElement.type = 'text/javascript';
+    //dataElement.src=endpointUrl;
+    //dataElement.onload = function() { //removes the tag when finished.
+      ////headerElement.removeChild(dataElement);
+    //};
+    //headerElement.appendChild(dataElement);
 }
 
 /*

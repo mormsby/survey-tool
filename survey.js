@@ -1,6 +1,6 @@
 // mocking an array of objects of the different survey segments
 var surveySegments = {
-  title: "Website Survey Assessment For The Month Of May",
+  title: "Pilot Experience Survey",
   segments: [
     {
       name: "Rate our site.",
@@ -96,7 +96,7 @@ var surveySegments = {
       show: true,
       question: 
         {
-          description: "Additional Feedback."
+          description: "Additional Feedback (Optional)"
         }
     }
   ]

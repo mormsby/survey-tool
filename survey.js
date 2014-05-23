@@ -3,7 +3,8 @@ var surveySegments = {
   title: "Website Survey Assessment For The Month Of May",
   segments: [
     {
-      name: "user website rating",
+      name: "Rate our site.",
+      segment: "pilot_rating",
       value: null,
       type: "radio",
       show: true,
@@ -35,7 +36,8 @@ var surveySegments = {
         }
     }, 
     {
-      name: "services satisfaction",
+      name: "How satisfied are you by the services provided on this site?",
+      segment: "pilot_satisfaction",
       value: null,
       type: "radio",
       show: true,
@@ -59,10 +61,11 @@ var surveySegments = {
         }
     },
     {
-      name: "website referral",
+      name: "How did you first hear about this site?",
       value: null,
+      segment: "pilot_referral",
       type: "radio",
-      show: true,
+      show: false,
       question: 
         {
           description: "How did you first hear about this site?",
@@ -87,20 +90,14 @@ var surveySegments = {
         }
     },
     {
-      name: "additional feedback",
-      value: null,
+      name: "Additional Feedback",
+      value: "",
       type: "textarea",
       show: true,
       question: 
         {
           description: "Additional Feedback."
         }
-    },
-    {
-      name: "question_3",
-      value: null,
-      type: "radio",
-      show: false
     }
   ]
 };
@@ -145,7 +142,7 @@ function buildModalInDom(){
                 '<div class="modal-body" id="survey-modal-body">'+
                 '</div>'+
                 '<div class="modal-footer">'+
-                    '<button type="button" class="btn btn-default"  onClick="hideSurvey()">Close</button>'+
+                    '<button type="button" class="btn btn-default"  onClick="hideSurvey() && reset()">Close</button>'+
                     '<button type="button" id="send-survey-button" class="btn btn-primary" data-dismiss="modal" onClick="submitSurvey() & hideSurvey()">Send results</button>'+
                 '</div>'+
             '</div>'+
@@ -255,7 +252,7 @@ function submitSurvey(){
 
     // add the survey segments that were set to the query string of the API call
     traverseSurveySegment(function(index){
-        if(surveySegments.segments[index].value != null){
+        if(surveySegments.segments[index].value != null && surveySegments.segments[index].value != ""){
             payload[surveySegments.segments[index].name] = surveySegments.segments[index].value;
 
             trackpayload.push({});
@@ -320,8 +317,8 @@ function reset(){
 */
 function createDataElement(endpointUrl, payload, trackpayload){
   xmlhttp=new XMLHttpRequest();
-  xmlhttp.open("POST","https://ec2-54-237-65-62.compute-1.amazonaws.com:8081/profile.json",true);
-  xmlhttp.send(JSON.stringify(payload));
+  xmlhttp.open("GET",endpointUrl,true);
+  xmlhttp.send();
 
   for (var index in trackpayload){
     xmlhttptrack=new XMLHttpRequest();

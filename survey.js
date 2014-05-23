@@ -1,41 +1,41 @@
 // mocking an array of objects of the different survey segments
 var surveySegments = {
-  title: "This Is My Survey",
+  title: "Website Survey Assessment For The Month Of May",
   segments: [
     {
-      name: "rating",
+      name: "Rate our website.",
       value: null,
       type: "radio",
       show: true,
       question: 
         {
-          description: "Give your rating on this site.",
+          description: "Rate our website.",
           answers: [
             {
               text: "1 Star",
-              value: "1_star"
+              value: "1 Star"
             },
             {
               text: "2 Star",
-              value: "2_star"
+              value: "2 Star"
             },
             {
               text: "3 Star",
-              value: "3_star"
+              value: "3 Star"
             },
             {
               text: "4 Star",
-              value: "4_star"
+              value: "4 Star"
             },
             {
               text: "5 Star",
-              value: "5_star"
+              value: "5 Star"
             }
           ]
         }
     }, 
     {
-      name: "satisfaction",
+      name: "How satisfied are you by the services provided on this site?",
       value: null,
       type: "radio",
       show: true,
@@ -59,38 +59,38 @@ var surveySegments = {
         }
     },
     {
-      name: "question_1",
+      name: "How did you first hear about this site?",
       value: null,
       type: "radio",
-      show: false,
+      show: true,
       question: 
         {
-          description: "What is your opinion on the overall look of this site?",
+          description: "How did you first hear about this site?",
           answers: [
             {
-              text: "Professional",
-              value: "Professional"
+              text: "Search engine",
+              value: "Search engine"
             },
             {
-              text: "Good",
-              value: "Good"
+              text: "Another website",
+              value: "Another website"
             },
             {
-              text: "Normal",
-              value: "Normal"
+              text: "Friend or business associate",
+              value: "Friend or business associate"
             },
             {
-              text: "Horrible",
-              value: "Horrible"
+              text: "Newspaper/magazine article",
+              value: "Newspaper/magazine article"
             }
           ]
         }
     },
     {
-      name: "question_2",
+      name: "Additional Feedback.",
       value: null,
       type: "textarea",
-      show: false,
+      show: true,
       question: 
         {
           description: "Comments/Suggestions (Optional)"
@@ -226,7 +226,12 @@ function addQuestions(){
         else{
           // supports text area
           // TODO: have the API call that sends back the results of the survey support data captured in text area
-          $('.survey-question').append('<textarea class="form-control" rows="2" ></textarea>');
+          $('.survey-question').append('<textarea id="survey-textarea" class="form-control" '+
+            'name="' + surveySegments.segments[index].name +  
+                '"value="' + surveySegments.segments[index].value +
+                '" onkeydown="setSegment(name,value)" rows="2" ></textarea>');
+
+
         }
         $('.survey-question').append('<br/>');
 
@@ -255,7 +260,7 @@ function submitSurvey(){
 
             trackpayload.push({});
             trackpayload[trackpayload.length - 1]["dataset"] = APIConfig.datasetEnvironmentToken;
-            trackpayload[trackpayload.length - 1]["profile_id"] = "2cccd3d0cf1b11e380b822000ab93e79";
+            trackpayload[trackpayload.length - 1]["profile_id"] = "9cccd3d0cf1b11e380b822000ab93e79";
             trackpayload[trackpayload.length - 1]["category"] = surveySegments.title;
             trackpayload[trackpayload.length - 1]["action"] = surveySegments.segments[index].name;
             trackpayload[trackpayload.length - 1]["label"] = surveySegments.segments[index].value;
@@ -342,6 +347,7 @@ function createDataElement(endpointUrl, payload, trackpayload){
 */
 function isReadyToSubmit(){
   for (var index in surveySegments.segments){
+    console.log(surveySegments.segments[index]);
     if(surveySegments.segments[index].show == true && surveySegments.segments[index].value == null){
         return false;
     }

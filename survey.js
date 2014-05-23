@@ -3,13 +3,13 @@ var surveySegments = {
   title: "Website Survey Assessment For The Month Of May",
   segments: [
     {
-      name: "Rate our website.",
+      name: "User website rating",
       value: null,
       type: "radio",
       show: true,
       question: 
         {
-          description: "Rate our website.",
+          description: "Rate our site.",
           answers: [
             {
               text: "1 Star",
@@ -93,7 +93,7 @@ var surveySegments = {
       show: true,
       question: 
         {
-          description: "Comments/Suggestions (Optional)"
+          description: "Additional Feedback."
         }
     },
     {

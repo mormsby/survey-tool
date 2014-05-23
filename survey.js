@@ -3,7 +3,7 @@ var surveySegments = {
   title: "Website Survey Assessment For The Month Of May",
   segments: [
     {
-      name: "User website rating",
+      name: "user website rating",
       value: null,
       type: "radio",
       show: true,
@@ -35,7 +35,7 @@ var surveySegments = {
         }
     }, 
     {
-      name: "How satisfied are you by the services provided on this site?",
+      name: "services satisfaction",
       value: null,
       type: "radio",
       show: true,
@@ -59,7 +59,7 @@ var surveySegments = {
         }
     },
     {
-      name: "How did you first hear about this site?",
+      name: "website referral",
       value: null,
       type: "radio",
       show: true,
@@ -87,7 +87,7 @@ var surveySegments = {
         }
     },
     {
-      name: "Additional Feedback.",
+      name: "additional feedback",
       value: null,
       type: "textarea",
       show: true,

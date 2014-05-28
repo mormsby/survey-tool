@@ -6,7 +6,7 @@ var surveySegments = {
       name: "Rate our site.",
       segment: "pilot_rating",
       value: null,
-      type: "radio",
+      type: "star",
       show: true,
       question: 
         {
@@ -211,23 +211,34 @@ function addQuestions(){
         if(surveySegments.segments[index].type != constants.questionAnswerHtmlElements.textarea){
           // supports radio buttons and checkboxes to date
           surveySegments.segments[index].question.answers.forEach(function(answer){
-            
-              $('.survey-question').append('<div class="radio"> ' + 
-                '<input type="' + surveySegments.segments[index].type + '" onClick="setSegment(name,value)"' + 
-                'name="' + surveySegments.segments[index].name +  
-                '"value="' + answer.value + '">' + 
-                answer.text + '<br/>' +
-              '</div>');
+              
+              if(surveySegments.segments[index].type == "star"){
+                $('.survey-question').append('<a onClick="setSegment(name,id)"'+
+                  'name="' + surveySegments.segments[index].name + 
+                  '" id="' + answer.value +
+                  '"><span class="glyphicon glyphicon-star"' +
+                  '></span></a>');
+              }
+              else{
+                $('.survey-question').append('<div class="radio"> ' + 
+                  '<input type="' + surveySegments.segments[index].type + '" onClick="setSegment(name,value)"' + 
+                  'name="' + surveySegments.segments[index].name +  
+                  '"value="' + answer.value + '">' + 
+                  answer.text + '<br/>' +
+                '</div>');
+              }
           });
         }
         else{
+
+          
           // supports text area
           // TODO: have the API call that sends back the results of the survey support data captured in text area
           $('.survey-question').append('<textarea id="survey-textarea" class="form-control" '+
             'name="' + surveySegments.segments[index].name +  
                 '"value="' + surveySegments.segments[index].value +
                 '" onkeydown="setSegment(name,value)" rows="2" ></textarea>');
-
+        
 
         }
         $('.survey-question').append('<br/>');
